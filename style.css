@@ -188,30 +188,46 @@ footer {
     border-radius: 8px;
     padding: 0.5rem;
     font-size: 0.8rem;
-    box-shadow: 2px 2px 4px rgba(0,0,0,0.05);
-}
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+    }
 
-/* Position characters around the table */
-.character1 {
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
+    /* Layout for discussion: arrange characters around the table using CSS grid */
+    .discussion-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            ". char1 ."
+            "char2 table char3"
+            ". char4 .";
+        justify-items: center;
+        align-items: center;
+        gap: 1rem;
+    }
 
-.character4 {
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
+    .char1 {
+        grid-area: char1;
+    }
 
-.character2 {
-    top: 50%;
-    left: 0;
-    transform: translate(0, -50%);
-}
+    .char2 {
+        grid-area: char2;
+    }
 
-.character3 {
-    top: 50%;
-    right: 0;
-    transform: translate(0, -50%);
-}
+    .char3 {
+        grid-area: char3;
+    }
+
+    .char4 {
+        grid-area: char4;
+    }
+
+    .discussion-grid .table {
+        grid-area: table;
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+        display: block;
+        margin: 0 auto 0.5rem;
+    }

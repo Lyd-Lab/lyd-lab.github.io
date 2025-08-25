@@ -176,10 +176,10 @@ footer {
     border-radius: 12px;
 }
 
+/* Ensure characters participate in the grid layout instead of absolute positioning */
 .discussion .character {
-    position: absolute;
-    width: 120px;
-    max-width: 40%;
+    /* Let the grid control placement; center contents within each grid cell */
+    text-align: center;
 }
 
 .discussion .bubble {

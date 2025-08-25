@@ -155,3 +155,63 @@ footer {
     border-top: 4px solid #ffccd5;
     color: #555;
 }
+
+/* Discussion styles: table and characters around it */
+.discussion {
+    position: relative;
+    max-width: 600px;
+    height: 280px;
+    margin: 2rem auto;
+}
+
+.discussion .table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 100px;
+    background-color: #ffe5e5;
+    border: 3px solid #ffcbd9;
+    border-radius: 12px;
+}
+
+.discussion .character {
+    position: absolute;
+    width: 120px;
+    max-width: 40%;
+}
+
+.discussion .bubble {
+    background-color: #ffffff;
+    border: 2px solid #ffcbd9;
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Position characters around the table */
+.character1 {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.character4 {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.character2 {
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+}
+
+.character3 {
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+}

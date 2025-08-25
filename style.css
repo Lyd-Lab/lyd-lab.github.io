@@ -156,7 +156,7 @@ footer {
     color: #555;
 }
 
-/* Discussion styles: full‑screen chat without a table */
+/* Discussion styles: full‑screen chat behind a play button */
 .discussion {
     position: relative;
     width: 100%;
@@ -164,32 +164,43 @@ footer {
     margin: 0;
     background: linear-gradient(to bottom, #fffaf5 0%, #ffe9e2 100%);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Container for characters; positions will overlap in the center and be revealed sequentially */
+/* Container for characters laid out horizontally */
 .discussion-grid {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2rem;
     width: 100%;
     height: 100%;
-    display: block;
+    position: relative;
 }
 
-/* Each character is absolutely centered; hidden by default via script */
+/* Character styling in row layout */
 .discussion .character {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -60%);
+    position: relative;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    z-index: 1;
+    justify-content: flex-end;
 }
 
-/* Speech bubbles for characters */
+/* When a character is active it moves up a bit */
+.discussion .character.active {
+    transform: translateY(-30px);
+}
+
+/* Speech bubbles: hidden by default */
 .discussion .bubble {
+    display: none;
     margin-top: 0.5rem;
     background-color: rgba(255, 255, 255, 0.9);
     border: 2px solid #ffcbd9;
@@ -197,13 +208,36 @@ footer {
     padding: 0.6rem 0.8rem;
     font-size: 0.9rem;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-    max-width: 80%;
+    max-width: 200px;
 }
 
-/* Larger avatars for full‑screen view */
+/* Show bubble when character is active */
+.discussion .character.active .bubble {
+    display: block;
+}
+
+/* Avatars for the row layout */
 .avatar {
-    width: 120px;
+    width: 100px;
     height: auto;
     display: block;
     margin: 0 auto;
+}
+
+/* Styling for the play button */
+.play-button {
+    margin-bottom: 1rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    background-color: #ffb6c1;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.play-button:hover {
+    background-color: #ffa5b0;
 }

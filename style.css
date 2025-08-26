@@ -215,6 +215,39 @@ footer {
 .discussion .character.active .bubble {
     display: block;
 }
+/* Only show one bubble at a time */
+.discussion .character .bubble { display: none; }
+.discussion .character.active .bubble { display: block; }
+
+/* Click-to-advance indicator */
+.click-indicator{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: .2px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;          /* let clicks pass through */
+}
+.click-indicator.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pointer hint while waiting for a click */
+.discussion.ready { cursor: pointer; }
+
+/* “Step up” effect on active speaker */
+.discussion .character.active{
+  transform: translateY(-16px) scale(1.02);
+  transition: transform .25s ease;
+}
 
 /* Avatars for the row layout */
 .avatar {

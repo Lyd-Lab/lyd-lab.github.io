@@ -1,121 +1,100 @@
-// script.js – minimal interactivity for the portfolio site
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Set current year in footer
-  const yearSpan = document.getElementById('year');
-  if (yearSpan) {
-    const currentYear = new Date().getFullYear();
-    yearSpan.textContent = currentYear;
-  }
-
-  // Simple smooth scroll for internal anchor links
-  const internalLinks = document.querySelectorAll('a[href^="#"]');
-  internalLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  // smooth scroll for nav (keep yours if already present)
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
       e.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
-      const targetEl = document.getElementById(targetId);
-      if (targetEl) {
-        window.scrollTo({ top: targetEl.offsetTop - 40, behavior: 'smooth' });
-      }
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) window.scrollTo({ top: el.offsetTop - 40, behavior: 'smooth' });
     });
   });
 
-  // Discussion animation: characters line up and speak one by one when play is pressed
-  const discussionCharacters = document.querySelectorAll('.discussion .character');
+  // --- Slide-deck style discussion ---
+  const container = document.getElementById('discussion');
+  const grid = container?.querySelector('.discussion-grid');
+  const characters = container ? container.querySelectorAll('.character') : [];
   const playButton = document.getElementById('playButton');
-  if (discussionCharacters.length && playButton) {
-    // Ensure characters are visible and bubbles hidden initially
-    discussionCharacters.forEach(char => {
-      // make sure character containers are visible in flex layout
-      char.style.display = 'flex';
-      const bubble = char.querySelector('.bubble');
-      if (bubble) {
-        bubble.style.display = 'none';
-      }
-      char.classList.remove('active');
+  const indicator = document.getElementById('clickIndicator');
+
+  if (!container || !grid || !characters.length || !playButton || !indicator) return;
+
+  // Your story beats (edit freely)
+  const storySteps = [
+    { sel: '.char1', text: 'Strategist: “Our tagline is ‘Succumb to the Crumb’. Thoughts?”' },
+    { sel: '.char2', text: 'Designer: “It’s punchy. I can make fun pixel crumbs.”' },
+    { sel: '.char3', text: 'Intern: “Manager says it’s vague… wants ‘bread crumb’ spelled out.”' },
+    { sel: '.char1', text: 'Strategist: “Over-specifying kills memorability.”' },
+    { sel: '.char4', text: 'Boss: “We need clarity. Can we A/B test instead of guessing?”' },
+    { sel: '.char2', text: 'Designer: “Ok: Version A ‘Succumb to the Crumb’. Version B ‘Succumb to the Bread Crumb’. Measure lift.”' },
+    { sel: '.char1', text: 'Strategist: “Define success: brand recall + CTR + comments sentiment.”' },
+    { sel: '.char3', text: 'Intern: “I’ll set the UTM scheme and comment classifier.”' },
+    { sel: '.char4', text: 'Boss: “Ship A/B, report Friday. If A wins, we keep it.”' },
+  ];
+
+  let step = -1;
+  let running = false;
+  let waiting = false;
+
+  function clearAll() {
+    characters.forEach(c => {
+      c.classList.remove('active');
+      const b = c.querySelector('.bubble');
+      if (b) b.style.display = 'none';
     });
-    // Define the story steps with character selectors and their lines
-    const storySteps = [
-      {
-        charSelector: '.char1',
-        text: 'Strategist: "I have a fun tagline: \u2018Succumb to the Crumb\u2019 – it\'s catchy and invites our audience to join our crumb revolution!"'
-      },
-      {
-        charSelector: '.char2',
-        text: 'Designer: "Ooh, I can already see the visuals! Let\'s make it pop with bright colors and playful type."'
-      },
-      {
-        charSelector: '.char3',
-        text: 'Intern: "And we can sprinkle some memes to go viral!"'
-      },
-      {
-        charSelector: '.char4',
-        text: 'Boss: "Wait, \u2018Crumb\u2019 is too vague. Let\'s say \u2018Succumb to the Bread Crumb\u2019 to be clear."'
-      },
-      {
-        charSelector: '.char1',
-        text: 'Strategist: "Hmm… I feel like that kills the pun and the fun. It\'s too wordy."'
-      },
-      {
-        charSelector: '.char2',
-        text: 'Designer: "Maybe we could lean into the pun but still hint at bread… \u2018Follow the Crumb\u2019 like a trail leading to our product!"'
-      },
-      {
-        charSelector: '.char3',
-        text: 'Intern: "Or \u2018Crumb and Get It\u2019 – that\'s snappy and invites people to join in!"'
-      },
-      {
-        charSelector: '.char4',
-        text: 'Boss: "Okay, let\'s settle on \u2018Crumb and Get It\u2019. We\'ll test it with our audience and see their reactions!"'
-      },
-      {
-        charSelector: '.char1',
-        text: 'Strategist: "Great! We\'ll monitor the metrics and adjust as needed. Let\'s get started."'
-      }
-    ];
-    const stepDelay = 2500; // milliseconds delay between steps
-    let isRunning = false;
-    function runSequence() {
-      if (isRunning) return;
-      isRunning = true;
-      let stepIndex = 0;
-      // Hide play button when sequence starts
-      playButton.style.display = 'none';
-      function runStep() {
-        if (stepIndex >= storySteps.length) {
-          // End of sequence: reset active states and show play button again
-          discussionCharacters.forEach(c => {
-            c.classList.remove('active');
-            const bub = c.querySelector('.bubble');
-            if (bub) bub.style.display = 'none';
-          });
-          playButton.style.display = 'inline-block';
-          isRunning = false;
-          return;
-        }
-        // Remove active state and hide bubbles from all characters
-        discussionCharacters.forEach(c => {
-          c.classList.remove('active');
-          const bub = c.querySelector('.bubble');
-          if (bub) bub.style.display = 'none';
-        });
-        const step = storySteps[stepIndex];
-        const charEl = document.querySelector(step.charSelector);
-        if (charEl) {
-          charEl.classList.add('active');
-          const bubbleEl = charEl.querySelector('.bubble');
-          if (bubbleEl) {
-            bubbleEl.textContent = step.text;
-            bubbleEl.style.display = 'block';
-          }
-        }
-        stepIndex++;
-        setTimeout(runStep, stepDelay);
-      }
-      runStep();
-    }
-    // Attach click handler to play button
-    playButton.addEventListener('click', runSequence);
   }
+
+  function render(i) {
+    clearAll();
+    const s = storySteps[i];
+    if (!s) {
+      // finished — show replay hint
+      indicator.textContent = 'Replay ▸';
+      indicator.classList.add('show');
+      container.classList.add('ready');
+      running = false;
+      waiting = true;   // allow click to restart
+      return;
+    }
+    const el = container.querySelector(s.sel);
+    if (!el) return;
+    el.classList.add('active');
+    const bubble = el.querySelector('.bubble');
+    if (bubble) {
+      bubble.textContent = s.text;
+      bubble.style.display = 'block';
+    }
+    // Ask for click to continue
+    indicator.textContent = 'Click to advance ▸';
+    indicator.classList.add('show');
+    container.classList.add('ready');
+    waiting = true;
+  }
+
+  function nextStep() {
+    step += 1;
+    render(step);
+  }
+
+  // Start the deck
+  playButton.addEventListener('click', () => {
+    playButton.style.display = 'none';
+    running = true;
+    step = -1;
+    nextStep();
+  });
+
+  // Advance only on click
+  container.addEventListener('click', () => {
+    if (!running && waiting && step >= storySteps.length) {
+      // replay from start
+      running = true;
+      step = -1;
+    }
+    if (!waiting) return;
+    waiting = false;
+    indicator.classList.remove('show');
+    container.classList.remove('ready');
+    // small delay so the indicator fades before the next beat
+    setTimeout(nextStep, 120);
+  });
 });
